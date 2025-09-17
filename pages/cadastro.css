@@ -1,0 +1,282 @@
+/* cadastro.css - Layout moderno e responsivo para todas as páginas do sistema */
+
+/* Fundo geral */
+body {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Container principal */
+.cadastro-container {
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 40px 32px 32px 32px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    text-align: center;
+    position: relative;
+}
+
+/* Título principal */
+.cadastro-container h1 {
+    color: #2563eb;
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+}
+
+/* Subtítulo */
+.cadastro-container h2 {
+    color: #2575fc;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+/* Labels e inputs */
+.cadastro-form label,
+.cadastro-container label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 18px;
+    color: #333;
+}
+.cadastro-form input[type="text"],
+.cadastro-container input[type="text"],
+.cadastro-form input[type="number"],
+.cadastro-container input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    font-size: 1.08rem;
+    margin-bottom: 6px;
+    background: #f7f8fa;
+    transition: border 0.2s;
+}
+.cadastro-form input[type="text"]:focus,
+.cadastro-container input[type="text"]:focus,
+.cadastro-form input[type="number"]:focus,
+.cadastro-container input[type="number"]:focus {
+    border: 1.5px solid #2563eb;
+    outline: none;
+}
+
+/* Botões principais */
+.matricula-btns-row,
+.matricula-btns-row-lista,
+.cadastro-btns-row {
+    display: flex;
+    gap: 18px;
+    margin: 32px 0 18px 0;
+    justify-content: center;
+}
+.matricula-btn,
+.cadastro-btn,
+.inicio-btn,
+.popup-btn-fechar,
+.cadastro-container input[type="submit"],
+.cadastro-container button,
+.cadastro-container a.btn {
+    flex: 1;
+    padding: 15px 0;
+    border-radius: 12px;
+    border: none;
+    font-size: 1.15rem;
+    font-weight: bold;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    margin-bottom: 0;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Botões coloridos */
+.matricula-btn-matricular,
+.cadastro-btn-matricular,
+.inicio-btn,
+.cadastro-container input[type="submit"] {
+    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+    color: #fff;
+}
+.matricula-btn-matricular:hover,
+.cadastro-btn-matricular:hover,
+.inicio-btn:hover,
+.cadastro-container input[type="submit"]:hover {
+    background: linear-gradient(90deg, #1e40af 0%, #2563eb 100%);
+    transform: scale(1.04);
+}
+.matricula-btn-desmatricular,
+.cadastro-btn-desmatricular {
+    background: linear-gradient(90deg, #dc3545 0%, #ff6a6a 100%);
+    color: #fff;
+}
+.matricula-btn-desmatricular:hover,
+.cadastro-btn-desmatricular:hover {
+    background: linear-gradient(90deg, #b71c1c 0%, #dc3545 100%);
+    transform: scale(1.04);
+}
+.matricula-btn-lista,
+.cadastro-btn-lista {
+    background: linear-gradient(90deg, #22c55e 0%, #bbf7d0 100%);
+    color: #fff;
+}
+.matricula-btn-lista:hover,
+.cadastro-btn-lista:hover {
+    background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
+    transform: scale(1.04);
+}
+.matricula-btn-lista2,
+.cadastro-btn-lista2 {
+    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+    color: #fff;
+}
+.matricula-btn-lista2:hover,
+.cadastro-btn-lista2:hover {
+    background: linear-gradient(90deg, #1e40af 0%, #2563eb 100%);
+    transform: scale(1.04);
+}
+
+/* Botão voltar */
+.matricula-btn-voltar,
+.cadastro-btn-voltar {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    padding: 8px 48px; /* <-- mais largo e menos quadrado */
+    border-radius: 16px; /* <-- mais suave */
+    border: none;
+    background: #ff4b2b;
+    color: white;
+    font-weight: bold;
+    font-size: 1.05rem;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(255,75,43,0.10);
+    z-index: 10;
+}
+.matricula-btn-voltar:hover,
+.cadastro-btn-voltar:hover {
+    background: #c82333;
+    transform: scale(1.04);
+}
+
+/* Popups */
+.popup-box {
+    display:none;
+    position:fixed;
+    top:40px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.18);
+    padding:32px 24px;
+    z-index:1000;
+    min-width:340px;
+    max-width:90vw;
+    text-align:left;
+}
+.popup-box h2 {
+    margin-top:0;
+    margin-bottom:18px;
+    font-size:1.3rem;
+    color:#2563eb;
+}
+.popup-list {
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+.popup-list li {
+    padding:14px 0;
+    border-bottom:1px solid #eee;
+    cursor:pointer;
+    transition:background 0.15s;
+}
+.popup-list li:hover {
+    background:#f1f5f9;
+}
+.popup-btn-fechar {
+    margin-top:24px;
+    padding:12px 32px;
+    border-radius:10px;
+    border:none;
+    background:#dc3545;
+    color:white;
+    font-weight:bold;
+    font-size:1.05rem;
+    cursor:pointer;
+    box-shadow: 0 4px 16px rgba(220,53,69,0.10);
+}
+.popup-btn-fechar:hover {
+    background:#b71c1c;
+    transform: scale(1.04);
+}
+.popup-overlay {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background:rgba(0,0,0,0.18);
+    z-index:999;
+}
+
+/* Ícones de sucesso/erro */
+.cadastro-container .icon-success {
+    font-size: 4rem;
+    color: #22c55e;
+    margin-bottom: 16px;
+}
+.cadastro-container .icon-error {
+    font-size: 4rem;
+    color: #dd2476;
+    margin-bottom: 16px;
+}
+
+/* Links de ação */
+.cadastro-container a.btn,
+.cadastro-container a.btn-secondary {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.05rem;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.10);
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+}
+.cadastro-container a.btn-secondary {
+    background: linear-gradient(90deg, #dc3545 0%, #ff6a6a 100%);
+}
+.cadastro-container a.btn:hover,
+.cadastro-container a.btn-secondary:hover {
+    background: linear-gradient(90deg, #1e40af 0%, #2563eb 100%);
+    transform: scale(1.04);
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .cadastro-container {
+        max-width: 98vw;
+        padding: 18px 6vw 18px 6vw;
+    }
+    .matricula-btn, .matricula-btn-voltar, .popup-btn-fechar,
+    .cadastro-btn, .cadastro-btn-voltar, .cadastro-container a.btn {
+        font-size: 1rem;
+        padding: 12px 18px;
+    }
+}

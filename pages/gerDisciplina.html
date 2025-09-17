@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Meta padrão Open Graph -->
+    <meta property="og:title" content="Sistema de Gestão Acadêmica">
+    <meta property="og:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+    <meta property="og:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+    <meta property="og:url" content="http://localhost:8081/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card opcional -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sistema de Gestão Acadêmica">
+    <meta name="twitter:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+    <meta name="twitter:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão Acadêmica</title>
+    <link rel="stylesheet" href="cadastro.css">
+    <link rel="shortcut icon" href="logo.png" style="border-radius: 50%;">
+</head>
+<body>
+    <div class="cadastro-container">
+        <button onclick="window.location.href='/'" class="matricula-btn-voltar">Voltar</button>
+        <h1>CADASTRO DE DISCIPLINA</h1>
+        <form action="/cadastroDisciplina" method="post" class="cadastro-form">
+            <label for="codigo">Código da Disciplina:</label>
+            <input type="text" name="codigo" id="codigo" required>
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" id="nome" required>
+            <label for="cargaHoraria">Carga Horária:</label>
+            <input type="number" name="cargaHoraria" id="cargaHoraria" required>
+            <div class="cadastro-btns-row">
+                <input type="submit" value="Cadastrar" class="cadastro-btn cadastro-btn-matricular">
+            </div>
+        </form>
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <form action="/alterarDisciplina" method="post">
+                <input type="hidden" name="codigo" id="codigoAlterar">
+                <input type="hidden" name="nome" id="nomeAlterar">
+                <input type="hidden" name="cargaHoraria" id="cargaHorariaAlterar">
+                <button type="submit" style="padding: 10px 20px; border-radius: 8px; border: none; background: #007bff; color: white; font-weight: bold; cursor: pointer;">
+                    Alterar
+                </button>
+            </form>
+            <form action="/excluirDisciplina" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina?');">
+                <input type="hidden" name="codigo" id="codigoExcluir">
+                <input type="hidden" name="nome" id="nomeExcluir">
+                <input type="hidden" name="cargaHoraria" id="cargaHorariaExcluir">
+                <button type="submit" style="padding: 10px 20px; border-radius: 8px; border: none; background: #dc3545; color: white; font-weight: bold; cursor: pointer;">
+                    Excluir
+                </button>
+            </form>
+        </div>
+
+        <div style="margin-top: 32px;">
+            <button id="abrirListaBtn" style="padding: 10px 24px; border-radius: 8px; border: none; background: #007bff; color: white; font-weight: bold; cursor: pointer;">
+                Mostrar Lista de Disciplinas
+            </button>
+        </div>
+
+        <div id="popupLista" style="display:none; position:fixed; top:40px; left:50%; transform:translateX(-50%); background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.18); padding:32px 24px; z-index:1000; min-width:340px; max-width:90vw;">
+            <h2 style="margin-top:0;">Lista de Disciplinas</h2>
+            <ul id="disciplinas-ul" style="list-style:none; padding:0; margin:0;"></ul>
+            <button id="fecharListaBtn" style="margin-top:24px; padding:8px 20px; border-radius:8px; border:none; background:#dc3545; color:white; font-weight:bold; cursor:pointer;">
+                Fechar
+            </button>
+        </div>
+        <div id="popupOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.18); z-index:999;"></div>
+
+        <script>
+            // Sincroniza campos entre os formulários
+            function syncFields() {
+                document.getElementById('codigoAlterar').value = document.getElementById('codigo').value;
+                document.getElementById('codigoExcluir').value = document.getElementById('codigo').value;
+                document.getElementById('nomeAlterar').value = document.getElementById('nome').value;
+                document.getElementById('nomeExcluir').value = document.getElementById('nome').value;
+                document.getElementById('cargaHorariaAlterar').value = document.getElementById('cargaHoraria').value;
+                document.getElementById('cargaHorariaExcluir').value = document.getElementById('cargaHoraria').value;
+            }
+            document.getElementById('codigo').addEventListener('input', syncFields);
+            document.getElementById('nome').addEventListener('input', syncFields);
+            document.getElementById('cargaHoraria').addEventListener('input', syncFields);
+
+            window.addEventListener('DOMContentLoaded', function() {
+                syncFields();
+
+                // Carrega disciplinas ao abrir popup
+                document.getElementById('abrirListaBtn').onclick = function() {
+                    document.getElementById('popupLista').style.display = 'block';
+                    document.getElementById('popupOverlay').style.display = 'block';
+                    fetch('/api/disciplinas')
+                        .then(response => response.json())
+                        .then(disciplinas => {
+                            const ul = document.getElementById('disciplinas-ul');
+                            ul.innerHTML = '';
+                            if (disciplinas.length === 0) {
+                                ul.innerHTML = '<li style="padding:12px; color:#888;">Nenhuma disciplina cadastrada.</li>';
+                            }
+                            disciplinas.forEach(disciplina => {
+                                const li = document.createElement('li');
+                                li.style.padding = '12px 0';
+                                li.style.borderBottom = '1px solid #eee';
+                                li.style.cursor = 'pointer';
+                                li.innerHTML = `
+                                    <div style="display:flex; flex-direction:column;">
+                                        <span style="font-weight:600; color:#007bff;">${disciplina.nome}</span>
+                                        <span style="font-size:0.95em; color:#555;">Código: <strong>${disciplina.codigo}</strong></span>
+                                        <span style="font-size:0.95em; color:#555;">Carga Horária: ${disciplina.cargaHoraria}h</span>
+                                    </div>
+                                `;
+                                // Ao clicar, copia os dados para os campos e fecha o popup
+                                li.onclick = function() {
+                                    document.getElementById('codigo').value = disciplina.codigo;
+                                    document.getElementById('nome').value = disciplina.nome;
+                                    document.getElementById('cargaHoraria').value = disciplina.cargaHoraria;
+                                    syncFields();
+                                    document.getElementById('popupLista').style.display = 'none';
+                                    document.getElementById('popupOverlay').style.display = 'none';
+                                };
+                                ul.appendChild(li);
+                            });
+                        })
+                        .catch(() => {
+                            document.getElementById('disciplinas-ul').innerHTML = '<li style="color:red;">Erro ao carregar disciplinas.</li>';
+                        });
+                };
+                document.getElementById('fecharListaBtn').onclick = function() {
+                    document.getElementById('popupLista').style.display = 'none';
+                    document.getElementById('popupOverlay').style.display = 'none';
+                };
+                document.getElementById('popupOverlay').onclick = function() {
+                    document.getElementById('popupLista').style.display = 'none';
+                    document.getElementById('popupOverlay').style.display = 'none';
+                };
+            });
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Meta padrão Open Graph -->
+    <meta property="og:title" content="Sistema de Gestão Acadêmica">
+    <meta property="og:description" content="Logs de acesso do sistema">
+    <meta property="og:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+    <meta property="og:url" content="http://localhost:8081/">
+    <meta property="og:type" content="website">
+    <!-- Twitter Card opcional -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sistema de Gestão Acadêmica">
+    <meta name="twitter:description" content="Logs de acesso do sistema">
+    <meta name="twitter:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log de Acesso</title>
+    <link rel="stylesheet" href="cadastro.css">
+    <style>
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 32px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .log-table th, .log-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .log-table th {
+            background: #2563eb;
+            color: #fff;
+            font-weight: 700;
+        }
+        .log-table tr:nth-child(even) {
+            background: #f7f8fa;
+        }
+        .pagination-btns {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 24px;
+        }
+        .pagination-btn {
+            padding: 10px 28px;
+            border-radius: 10px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.10);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .pagination-btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="cadastro-container">
+        <button onclick="window.location.href='/'" class="matricula-btn-voltar">Voltar</button>
+        <h1>Log de Acesso</h1>
+        <table class="log-table">
+            <thead>
+                <tr>
+                    <th>Usuário/IP</th>
+                    <th>Rota Acessada</th>
+                    <th>Data/Hora</th>
+                </tr>
+            </thead>
+            <tbody id="log-tbody">
+                <!-- Logs serão inseridos aqui -->
+            </tbody>
+        </table>
+        <div class="pagination-btns">
+            <button id="prevBtn" class="pagination-btn" disabled>Anterior</button>
+            <button id="nextBtn" class="pagination-btn" disabled>Próxima</button>
+        </div>
+    </div>
+    <script>
+        let page = 1;
+        const limit = 10;
+
+        function fetchLogs() {
+            fetch(`/api/logAcesso?page=${page}&limit=${limit}`)
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.getElementById('log-tbody');
+                    tbody.innerHTML = '';
+                    if (data.logs.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#888;">Nenhum acesso registrado.</td></tr>';
+                    }
+                    data.logs.forEach(log => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${log.usuario}</td>
+                            <td>${log.rotaAcessada}</td>
+                            <td>${new Date(log.dataHora).toLocaleString()}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    document.getElementById('prevBtn').disabled = page === 1;
+                    document.getElementById('nextBtn').disabled = !data.hasMore;
+                });
+        }
+
+        document.getElementById('prevBtn').onclick = function() {
+            if (page > 1) {
+                page--;
+                fetchLogs();
+            }
+        };
+        document.getElementById('nextBtn').onclick = function() {
+            page++;
+            fetchLogs();
+        };
+
+        window.onload = fetchLogs;
+    </script>
+</body>
+</html>

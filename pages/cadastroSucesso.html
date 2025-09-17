@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <!-- Meta padrão Open Graph -->
+        <meta property="og:title" content="Sistema de Gestão Acadêmica">
+        <meta property="og:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+        <meta property="og:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+        <meta property="og:url" content="http://localhost:8081/">
+        <meta property="og:type" content="website">
+
+        <!-- Twitter Card opcional -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Sistema de Gestão Acadêmica">
+        <meta name="twitter:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+        <meta name="twitter:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sistema de Gestão Acadêmica</title>
+        <link rel="stylesheet" href="cadastro.css">
+        <link rel="shortcut icon" href="logo.png">
+    </head>
+    <body>
+        <div class="cadastro-container">
+            <div style="font-size:4rem; margin-bottom:16px;">✅</div>
+            <h1 style="color:#2575fc;">Cadastro realizado com sucesso!</h1>
+            <p>O registro foi salvo no sistema.</p>
+            <a href="javascript:history.back()" class="btn" style="margin-top:24px;">Voltar</a>
+        </div>
+        <script type="text/javascript">   
+            function Redirect() 
+            {  
+                window.location="javascript:history.back()"; 
+            } 
+            setTimeout('Redirect()', 2000);   
+        </script>
+    </body>
+</html>

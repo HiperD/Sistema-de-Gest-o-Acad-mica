@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Meta padrão Open Graph -->
+    <meta property="og:title" content="Sistema de Gestão Acadêmica">
+    <meta property="og:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+    <meta property="og:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+    <meta property="og:url" content="http://localhost:8081/">
+    <meta property="og:type" content="website">
+    <!-- Twitter Card opcional -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sistema de Gestão Acadêmica">
+    <meta name="twitter:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+    <meta name="twitter:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão Acadêmica</title>
+    <link rel="stylesheet" href="cadastro.css">
+    <link rel="shortcut icon" href="logo.png">
+</head>
+<body>
+    <div class="cadastro-container">
+        <button onclick="window.location.href='/'" class="matricula-btn-voltar">Voltar</button>
+        <h1>Matricular Aluno</h1>
+        <form id="matriculaForm" action="/matricula" method="POST" class="cadastro-form" style="display:inline;">
+            <label for="matricula">Matrícula do Aluno:</label>
+            <input type="text" id="matricula" name="matricula" required>
+            <label for="codigo">Código da Disciplina:</label>
+            <input type="text" id="codigo" name="codigo" required>
+            <div class="matricula-btns-row">
+                <input type="submit" value="Matricular" class="matricula-btn matricula-btn-matricular">
+        </form>
+        <form id="desmatriculaForm" action="/desmatricula" method="POST" style="display:inline;">
+            <input type="hidden" name="matricula" id="matriculaDesmatricula">
+            <input type="hidden" name="codigo" id="codigoDesmatricula">
+            <input type="submit" value="Desmatricular" class="matricula-btn matricula-btn-desmatricular">
+        </form>
+            </div>
+        <div class="matricula-btns-row-lista">
+            <button id="mostrarAlunosBtn" class="matricula-btn matricula-btn-lista2">
+                Mostrar Lista de Alunos
+            </button>
+            <button id="mostrarDisciplinasBtn" class="matricula-btn matricula-btn-lista">
+                Mostrar Lista de Disciplinas
+            </button>
+        </div>
+    </div>
+
+    <!-- Popup Alunos -->
+    <div id="popupAlunos" class="popup-box">
+        <h2>Lista de Alunos</h2>
+        <ul id="alunos-ul" class="popup-list"></ul>
+        <button id="fecharAlunosBtn" class="popup-btn-fechar">Fechar</button>
+    </div>
+    <!-- Popup Disciplinas -->
+    <div id="popupDisciplinas" class="popup-box">
+        <h2>Lista de Disciplinas</h2>
+        <ul id="disciplinas-ul" class="popup-list"></ul>
+        <button id="fecharDisciplinasBtn" class="popup-btn-fechar">Fechar</button>
+    </div>
+    <div id="popupOverlay" class="popup-overlay"></div>
+
+    <script>
+        // Sincroniza campos hidden do desmatricula
+        function syncDesmatriculaFields() {
+            document.getElementById('matriculaDesmatricula').value = document.getElementById('matricula').value;
+            document.getElementById('codigoDesmatricula').value = document.getElementById('codigo').value;
+        }
+        document.getElementById('matricula').addEventListener('input', syncDesmatriculaFields);
+        document.getElementById('codigo').addEventListener('input', syncDesmatriculaFields);
+        window.addEventListener('DOMContentLoaded', syncDesmatriculaFields);
+
+        // Sincronização ao clicar nas listas
+        function setMatricula(matricula) {
+            document.getElementById('matricula').value = matricula;
+            syncDesmatriculaFields();
+        }
+        function setCodigo(codigo) {
+            document.getElementById('codigo').value = codigo;
+            syncDesmatriculaFields();
+        }
+
+        // Popup Alunos
+        document.getElementById('mostrarAlunosBtn').onclick = function() {
+            document.getElementById('popupAlunos').style.display = 'block';
+            document.getElementById('popupOverlay').style.display = 'block';
+            fetch('/api/alunos')
+                .then(response => response.json())
+                .then(alunos => {
+                    const ul = document.getElementById('alunos-ul');
+                    ul.innerHTML = '';
+                    if (alunos.length === 0) {
+                        ul.innerHTML = '<li style="padding:12px; color:#888;">Nenhum aluno cadastrado.</li>';
+                    }
+                    alunos.forEach(aluno => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div style="display:flex; flex-direction:column;">
+                                <span style="font-weight:600; color:#2563eb;">${aluno.nome}</span>
+                                <span style="font-size:0.95em; color:#555;">Matrícula: <strong>${aluno.matricula}</strong></span>
+                                <span style="font-size:0.95em; color:#555;">Curso: ${aluno.curso}</span>
+                            </div>
+                        `;
+                        li.onclick = function() {
+                            setMatricula(aluno.matricula);
+                            document.getElementById('popupAlunos').style.display = 'none';
+                            document.getElementById('popupOverlay').style.display = 'none';
+                        };
+                        ul.appendChild(li);
+                    });
+                })
+                .catch(() => {
+                    document.getElementById('alunos-ul').innerHTML = '<li style="color:red;">Erro ao carregar alunos.</li>';
+                });
+        };
+        document.getElementById('fecharAlunosBtn').onclick = function() {
+            document.getElementById('popupAlunos').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+        };
+
+        // Popup Disciplinas
+        document.getElementById('mostrarDisciplinasBtn').onclick = function() {
+            document.getElementById('popupDisciplinas').style.display = 'block';
+            document.getElementById('popupOverlay').style.display = 'block';
+            fetch('/api/disciplinas')
+                .then(response => response.json())
+                .then(disciplinas => {
+                    const ul = document.getElementById('disciplinas-ul');
+                    ul.innerHTML = '';
+                    if (disciplinas.length === 0) {
+                        ul.innerHTML = '<li style="padding:12px; color:#888;">Nenhuma disciplina cadastrada.</li>';
+                    }
+                    disciplinas.forEach(disciplina => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div style="display:flex; flex-direction:column;">
+                                <span style="font-weight:600; color:#22c55e;">${disciplina.nome}</span>
+                                <span style="font-size:0.95em; color:#555;">Código: <strong>${disciplina.codigo}</strong></span>
+                                <span style="font-size:0.95em; color:#555;">Carga Horária: ${disciplina.cargaHoraria}h</span>
+                            </div>
+                        `;
+                        li.onclick = function() {
+                            setCodigo(disciplina.codigo);
+                            document.getElementById('popupDisciplinas').style.display = 'none';
+                            document.getElementById('popupOverlay').style.display = 'none';
+                        };
+                        ul.appendChild(li);
+                    });
+                })
+                .catch(() => {
+                    document.getElementById('disciplinas-ul').innerHTML = '<li style="color:red;">Erro ao carregar disciplinas.</li>';
+                });
+        };
+        document.getElementById('fecharDisciplinasBtn').onclick = function() {
+            document.getElementById('popupDisciplinas').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+        };
+
+        // Overlay fecha todos popups
+        document.getElementById('popupOverlay').onclick = function() {
+            document.getElementById('popupAlunos').style.display = 'none';
+            document.getElementById('popupDisciplinas').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+        };
+    </script>
+</body>
+</html>

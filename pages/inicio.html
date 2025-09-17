@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <!-- Meta padrão Open Graph -->
+        <meta property="og:title" content="Sistema de Gestão Acadêmica">
+        <meta property="og:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+        <meta property="og:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+        <meta property="og:url" content="http://localhost:8081/">
+        <meta property="og:type" content="website">
+
+        <!-- Twitter Card opcional -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Sistema de Gestão Acadêmica">
+        <meta name="twitter:description" content="Gerencie alunos, disciplinas e matrículas de forma simples e eficiente.">
+        <meta name="twitter:image" content="https://hiperd.github.io/WebFrontEnd/navescitizen.png">
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sistema de Gestão Acadêmica</title>
+        <link rel="stylesheet" href="cadastro.css">
+        <link rel="shortcut icon" href="logo.png">
+        <style>
+            /* Adaptação para centralizar os botões usando o mesmo padrão do cadastro.css */
+            .cadastro-container {
+                max-width: 400px;
+                margin: 80px auto;
+                padding: 40px 32px;
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                text-align: center;
+            }
+            .inicio-btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 18px;
+                background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
+                color: #fff;
+                padding: 14px 0;
+                border: none;
+                border-radius: 12px;
+                font-size: 1.15rem;
+                font-weight: 600;
+                box-shadow: 0 4px 16px rgba(221,36,118,0.18);
+                transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .inicio-btn:last-child {
+                margin-bottom: 0;
+            }
+            .inicio-btn:hover {
+                background: linear-gradient(90deg, #dd2476 0%, #ff512f 100%);
+                transform: translateY(-2px) scale(1.03);
+                box-shadow: 0 8px 24px rgba(221,36,118,0.22);
+            }
+            .logs-btn-flutuante {
+                position: fixed;
+                right: 32px;
+                bottom: 32px;
+                background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+                color: #fff;
+                padding: 16px 32px;
+                border-radius: 50px;
+                font-size: 1.08rem;
+                font-weight: bold;
+                box-shadow: 0 8px 32px rgba(37,99,235,0.18);
+                border: none;
+                cursor: pointer;
+                text-decoration: none;
+                z-index: 100;
+                transition: background 0.2s, transform 0.2s;
+            }
+            .logs-btn-flutuante:hover {
+                background: linear-gradient(90deg, #1e40af 0%, #2563eb 100%);
+                transform: scale(1.06);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="cadastro-container">
+            
+            <h1>Sistema de Gestão Acadêmica</h1>
+            <a href="/gerenciaMatricula" class="inicio-btn">GERENCIAR MATRICULAS</a>
+            <a href="/gerenciaAluno" class="inicio-btn">GERENCIAR ALUNOS</a>
+            <a href="/gerenciaDisciplina" class="inicio-btn">GERENCIAR DISCIPLINAS</a>
+        </div>
+        <a href="/logs" class="logs-btn-flutuante">Ver Logs</a>
+    </body>
+</html>
